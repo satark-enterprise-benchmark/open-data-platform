@@ -1,0 +1,21 @@
+flowchart LR
+  Doctor[scripts/doctor.sh] --> LocalUp[scripts/local-up.sh]
+  LocalUp --> Kind[Kind odp-local]
+  LocalUp --> Secrets[local-secrets.sh]
+  LocalUp --> Images[build-local-images.sh]
+  LocalUp --> Kustomize[standalone kustomization]
+  Kustomize --> PG[postgres]
+  Kustomize --> Kafka[kafka]
+  Kustomize --> DBZ[debezium]
+  Kustomize --> Garage[garage]
+  Kustomize --> Polaris[polaris]
+  Kustomize --> Spark[spark-client]
+  Kustomize --> Trino[trino]
+  Kustomize --> Airflow[airflow]
+  Kustomize --> Obs[otel/prom/grafana]
+  Polaris --> PG
+  DBZ --> PG
+  DBZ --> Kafka
+  Spark --> Polaris
+  Spark --> Garage
+  Trino --> Polaris

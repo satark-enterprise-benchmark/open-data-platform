@@ -1,0 +1,17 @@
+sequenceDiagram
+  participant PG as PostgreSQL
+  participant DBZ as Debezium
+  participant K as Kafka
+  participant S as Spark
+  participant P as Polaris/Iceberg
+  participant T as Trino
+  Note over PG,T: CDC golden path
+  PG->>DBZ: logical decoding
+  DBZ->>K: change events
+  K->>S: Structured Streaming
+  S->>P: Bronze/Silver/Gold writes
+  T->>P: SQL readback
+  Note over PG,T: Batch golden path
+  PG->>S: JDBC snapshot
+  S->>P: medallion writes
+  T->>P: SQL readback

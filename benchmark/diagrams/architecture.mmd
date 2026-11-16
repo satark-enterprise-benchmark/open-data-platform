@@ -1,0 +1,25 @@
+flowchart TB
+  subgraph sources [Data Sources]
+    PG[(PostgreSQL source.orders)]
+  end
+  subgraph ingest [Ingestion and Messaging]
+    DBZ[Debezium Connect]
+    KFK[Kafka KRaft]
+    GAR[Garage S3]
+  end
+  subgraph lake [Lakehouse]
+    POL[Apache Polaris]
+    ICE[Iceberg Tables]
+  end
+  subgraph compute [Compute and Serving]
+    SP[Apache Spark]
+    TR[Trino]
+    AF[Apache Airflow]
+  end
+  PG --> DBZ --> KFK --> SP
+  PG -->|JDBC batch| SP
+  SP --> ICE
+  GAR --> ICE
+  POL --> ICE
+  ICE --> TR
+  AF -->|orchestrates| SP
